@@ -180,9 +180,7 @@ for /f "tokens=1* delims=." %%i in ("%ESCAPEDKEY%") do (
 )
 
 set RESULT=0
-msbuild.exe RA_Integration.sln -t:%ESCAPEDKEY% -p:Configuration=%~2 -p:Platform=%~3 /warnaserror /nowarn:MSB8051,C5045
-if errorlevel 1 set RESULT=1
-echo result %RESULT%
+msbuild.exe RA_Integration.sln -t:%ESCAPEDKEY% -p:Configuration=%~2 -p:Platform=%~3 /warnaserror /nowarn:MSB8051,C5045 || set RESULT=1234
 
 rem === If build failed, bail ===
 
@@ -213,8 +211,7 @@ echo.
 echo Calling %VSTEST_PATH% %DLL_PATH%
 
 set RESULT=0
-"%VSTEST_PATH%" /Blame %DLL_PATH%
-if errorlevel 1 set RESULT=1
+"%VSTEST_PATH%" /Blame %DLL_PATH% || set RESULT=1235
 
 rem -- report any errors captured by /Blame --
 rem if exist TestResults (
@@ -236,5 +233,5 @@ echo %PROJECTKEY% >> %BUILDLOG%
 rem === For termination from within function ===
 
 :eof
-echo final %RESULT%
+echo BuildAll returning exit code %RESULT%
 exit /B %RESULT%
