@@ -125,6 +125,7 @@ if %BUILDCLEAN% equ 1 (
     )
 
     if %ANALYSIS% equ 1 (
+        del /s *.lastcodeanalysissucceeded
         call :build RA_Integration Analysis || goto eof
     )
 )
@@ -179,6 +180,7 @@ for /f "tokens=1* delims=." %%i in ("%ESCAPEDKEY%") do (
 
 msbuild.exe RA_Integration.sln -t:%ESCAPEDKEY% -p:Configuration=%~2 -p:Platform=%~3 /warnaserror /nowarn:MSB8051,C5045
 set RESULT=%ERRORLEVEL%
+echo result %RESULT%
 
 rem === If build failed, bail ===
 
@@ -232,4 +234,5 @@ echo %PROJECTKEY% >> %BUILDLOG%
 rem === For termination from within function ===
 
 :eof
+echo errorlevel %ERRORLEVEL%
 exit /B %ERRORLEVEL%
