@@ -95,8 +95,6 @@ MemoryViewerViewModel::MemoryViewerViewModel()
     memset(m_pColor, STALE_COLOR, MaxLines * 16);
 
     m_pColor[0] = HIGHLIGHTED_COLOR;
-
-    AddNotifyTarget(*this);
 }
 
 void MemoryViewerViewModel::InitializeNotifyTargets()
@@ -251,7 +249,7 @@ void MemoryViewerViewModel::SetFirstAddress(ra::ByteAddress value)
     SetValue(FirstAddressProperty, nSignedValue);
 }
 
-void MemoryViewerViewModel::OnViewModelIntValueChanged(const IntModelProperty::ChangeArgs& args)
+void MemoryViewerViewModel::OnValueChanged(const IntModelProperty::ChangeArgs& args)
 {
     if (args.Property == AddressProperty)
     {
@@ -309,6 +307,8 @@ void MemoryViewerViewModel::OnViewModelIntValueChanged(const IntModelProperty::C
         m_pSurface.reset();
         m_nNeedsRedraw = REDRAW_ALL;
     }
+
+    ViewModelBase::OnValueChanged(args);
 }
 
 void MemoryViewerViewModel::AdvanceCursor()
