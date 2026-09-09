@@ -47,7 +47,7 @@ _NODISCARD static bool HandleHttpError(_In_ const ra::services::Http::StatusCode
 
 _NODISCARD static bool GetJson([[maybe_unused]] _In_ const char* sApiName,
                                _In_ const ra::services::Http::Response& httpResponse,
-                               _Inout_ ApiResponseBase& pResponse, _Out_ ra::util::Json::Reader& pJson)
+                               _Inout_ ApiResponseBase& pResponse, _Inout_ ra::util::Json::Reader& pJson)
 {
     if (httpResponse.Content().empty())
     {
