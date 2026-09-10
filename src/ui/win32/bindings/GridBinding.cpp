@@ -852,6 +852,16 @@ void GridBinding::SetHWND(DialogBase& pDialog, HWND hControl)
 
         if (m_vmItems)
             UpdateAllItems();
+
+        // if an editable column exists, hook the wndproc so we can prevent scrolling while editing.
+        for (const auto& pColumn : m_vColumns)
+        {
+            if (!pColumn->IsReadOnly())
+            {
+                SubclassWndProc();
+                break;
+            }
+        }
     }
 
 #ifdef UNICODE
@@ -910,6 +920,12 @@ INT_PTR CALLBACK GridBinding::WndProc(HWND hControl, UINT uMsg, WPARAM wParam, L
                     }
                 }
             }
+            break;
+
+        case WM_MOUSEWHEEL:
+            // prevent scrolling if the IPE is open
+            if (m_hInPlaceEditor)
+                return 0;
             break;
     }
 
